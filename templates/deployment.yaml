@@ -54,9 +54,15 @@ spec:
           {{- end }}
           {{- with .Values.resources }}
           resources:
-            {{- toYaml . | nindent 12 }}
+            requests:
+              memory: {{ required ".Values.deployment.resources.memory.request is required." .Values.deployment.resources.memory.request | quote }}
+              cpu: {{ required ".Values.deployment.resources.cpu.request is required." .Values.deployment.resources.cpu.request | quote }}
+          env:
+            - name: ENVIRONMENT
+              value: {{ .Values.environment }}
+            - name: APP_NAME
+              value: {{ .Values.appName }}
           {{- end }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
